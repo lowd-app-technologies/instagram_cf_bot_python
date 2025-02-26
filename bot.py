@@ -28,7 +28,7 @@ username_input.send_keys("rafhenry_")
 password_input.send_keys("rafaelgamer100")
 password_input.send_keys(Keys.RETURN)
 
-time.sleep(5)  # Aguarda o login ser concluído
+time.sleep(10)  # Aguarda o login ser concluído
 
 print("Login realizado com sucesso!")
 
