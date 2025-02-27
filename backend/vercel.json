@@ -1,0 +1,27 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "main.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/",
+            "dest": "main.py"
+        },
+        {
+            "src": "/api/get_user_info",
+            "dest": "main.py"
+        },
+        {
+            "src": "/api/run_selenium",
+            "dest": "main.py"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "main.py"
+        }
+    ]
+}

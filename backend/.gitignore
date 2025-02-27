@@ -1,0 +1,5 @@
+# Ignorar apenas diretórios específicos
+venv/
+__pycache__/
+*.pyc
+.DS_Store

@@ -42,7 +42,7 @@ export default function Home() {
     }, 500);
 
     try {
-      const response = await fetch("https://instagram-close-friends-backend.onrender.com/api/get_user_info", {
+      const response = await fetch("https://instagram-close-friends-backend.up.railway.app/api/get_user_info", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export default function Home() {
     }, 500);
 
     try {
-      const response = await fetch("https://instagram-close-friends-backend.onrender.com/api/run_selenium", {
+      const response = await fetch("https://instagram-close-friends-backend.up.railway.app/api/run_selenium", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
