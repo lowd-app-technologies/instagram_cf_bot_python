@@ -1,7 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import Image from 'next/image';
 import { Progress } from "@/components/ui/progress"; 
+
+interface UserInfo {
+  name: string;
+  profilePicture: string;
+}
+
+interface UserResponse {
+  user_name: string;
+  profile_picture: string;
+  message?: string;
+}
 
 export default function Home() {
   const [username, setUsername] = useState("");
@@ -10,15 +22,14 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [userInfo, setUserInfo] = useState(null); 
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null); 
   const [addingFollowers, setAddingFollowers] = useState(false); 
   const [followersProgress, setFollowersProgress] = useState(0); 
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-
 
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
@@ -31,7 +42,7 @@ export default function Home() {
     }, 500);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/get_user_info/", {
+      const response = await fetch("https://instagram-close-friends-backend.onrender.com/api/get_user_info", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +50,7 @@ export default function Home() {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
+      const data: UserResponse = await response.json();
       setLoading(false);
 
       if (data.message) {
@@ -49,22 +60,20 @@ export default function Home() {
           profilePicture: data.profile_picture,
         });
         startAddingFollowers(); 
-      } else if (data.error) {
+      } else {
         setIsSuccess(false);
-        setMessage(data.error);
+        setMessage("Erro ao recuperar informações");
       }
-    } catch (error) {
+    } catch {
       setLoading(false);
       setIsSuccess(false);
       setMessage("Ocorreu um erro ao se conectar ao servidor.");
     }
   };
 
-
   const startAddingFollowers = async () => {
     setAddingFollowers(true);
     setFollowersProgress(0);
-
 
     const timer = setInterval(() => {
       setFollowersProgress((oldProgress) => {
@@ -77,7 +86,7 @@ export default function Home() {
     }, 500);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/run_selenium/", {
+      const response = await fetch("https://instagram-close-friends-backend.onrender.com/api/run_selenium", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +100,7 @@ export default function Home() {
       } else {
         setMessage("Erro ao adicionar seguidores.");
       }
-    } catch (error) {
+    } catch {
       setMessage("Erro ao conectar para adicionar seguidores.");
     } finally {
       setAddingFollowers(false);
@@ -106,9 +115,11 @@ export default function Home() {
 
       {userInfo ? (
         <div className="text-center mb-6">
-          <img
-            src={`http://127.0.0.1:8000${userInfo.profilePicture}`} 
+          <Image
+            src={`${userInfo.profilePicture}`} 
             alt="Foto de perfil"
+            width={128}
+            height={128}
             className="w-32 h-32 rounded-full mx-auto mb-4"
           />
           <h2 className="text-xl font-semibold">Bem-vindo, {userInfo.name}!</h2>
